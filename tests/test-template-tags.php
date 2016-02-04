@@ -41,8 +41,6 @@ class Test_Template_Tags_CoAuthors extends CoAuthorsPlus_TestCase {
 
 		wp_reset_postdata();
 
-		$this->assertWPError( get_coauthors() );
-
 	}
 
 	public function test_coauthors_post_links() {
