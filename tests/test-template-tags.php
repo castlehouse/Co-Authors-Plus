@@ -146,15 +146,26 @@ class Test_Template_Tags_CoAuthors extends CoAuthorsPlus_TestCase {
 
 	public function test_get_the_coauthor_meta() {
 
-		update_user_meta( $this->author1, 'nickname', 'nickname' );
-
+		update_user_meta( $this->author1, 'testmeta', 'testmeta' );
 		$this->go_to( '?p=' . $this->author1_post1 );
 
 		setup_postdata( get_post( $this->author1_post1 ) );
 
-		$coauthor = get_the_coauthor_meta( 'nickname');
-		$this->assertEquals( 'nickname', $coauthor[$this->author1] );
+		$coauthor = get_the_coauthor_meta( 'testmeta');
+		$this->assertEquals( 'testmeta', $coauthor[$this->author1] );
 
 		wp_reset_postdata();
+	}
+
+	public function test_coauthors_wp_list_authors() {
+
+		$coauthors = get_echo( 'coauthors_wp_list_authors', array() );
+		$this->assertContains( 'author1', $coauthors );
+	}
+
+	public function test_coauthors_get_avatar() {
+		$coauthors = get_echo( 'coauthors_get_avatar', array( $this->author1 ) );
+
+		$this->assertEmpty( $coauthors );
 	}
 }
