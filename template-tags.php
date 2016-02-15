@@ -364,7 +364,7 @@ function coauthors_emails( $between = null, $betweenLast = null, $before = null,
  * @return string
  */
 function coauthors_links_single( $author ) {
-	if ( get_the_author_meta( 'url' ) ) {
+	if ( get_the_author_meta( 'url', $author ) ) {
 		return sprintf( '<a href="%s" title="%s" rel="external">%s</a>',
 			get_the_author_meta( 'url' ),
 			esc_attr( sprintf( __( 'Visit %s&#8217;s website' ), get_the_author() ) ),
@@ -393,17 +393,26 @@ function coauthors_IDs( $between = null, $betweenLast = null, $before = null, $a
 	), null, $echo );
 }
 
-function get_the_coauthor_meta( $field ) {
+function get_the_coauthor_meta( $field, $user_id = 0 ) {
 	global $wp_query, $post;
 
 	$coauthors = get_coauthors();
 	$meta = array();
+	if ( in_array( $field, array( 'login', 'pass', 'nicename', 'email', 'url', 'registered', 'activation_key', 'status' ) ) ) {
+		$field = 'user_' . $field;
+	}
 
 	foreach ( $coauthors as $coauthor ) {
-		$user_id = $coauthor->ID;
-		$meta[ $user_id ] = get_the_author_meta( $field, $user_id );
+		if ( isset( $coauthor->ID, $coauthor->$field ) ) {
+			$meta[ $coauthor->ID ] = $coauthor->$field;
+		}
 	}
-	return $meta;
+
+	if ( ( ! empty( $user_id ) ) && ( array_key_exists( $user_id, $meta ) ) ) {
+		return $meta[ $user_id ];
+	} else {
+		return $meta;
+	}
 }
 
 function the_coauthor_meta( $field, $user_id = 0 ) {
