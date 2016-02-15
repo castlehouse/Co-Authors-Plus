@@ -364,7 +364,7 @@ function coauthors_emails( $between = null, $betweenLast = null, $before = null,
  * @return string
  */
 function coauthors_links_single( $author ) {
-	if ( get_the_author_meta( 'url', $author ) ) {
+	if ( get_the_author_meta( 'url' ) ) {
 		return sprintf( '<a href="%s" title="%s" rel="external">%s</a>',
 			get_the_author_meta( 'url' ),
 			esc_attr( sprintf( __( 'Visit %s&#8217;s website' ), get_the_author() ) ),
